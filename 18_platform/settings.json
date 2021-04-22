@@ -17,5 +17,8 @@
         "**/*.su":true, 
         "**/*.cmd":true,
         "Documentation":true, 
+    },
+    "files.associations": {
+        "of_gpio.h": "c"
     }
 }

@@ -4,9 +4,9 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/home/gg/linux/IMX6ULL/linux/linux-imx-rel_imx_4.1.15_2.1.0_ga/include", 
-                "/home/gg/linux/IMX6ULL/linux/linux-imx-rel_imx_4.1.15_2.1.0_ga/arch/arm/include", 
-                "/home/gg/linux/IMX6ULL/linux/linux-imx-rel_imx_4.1.15_2.1.0_ga/arch/arm/include/generated/"
+                "/home/zzk/linux/IMX6ULL/linux/linux-imx-rel_imx_4.1.15_2.1.0_ga_alientek/include", 
+                "/home/zzk/linux/IMX6ULL/linux/linux-imx-rel_imx_4.1.15_2.1.0_ga_alientek/arch/arm/include", 
+                "/home/zzk/linux/IMX6ULL/linux/linux-imx-rel_imx_4.1.15_2.1.0_ga_alientek/arch/arm/include/generated/"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",

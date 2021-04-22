@@ -8,25 +8,30 @@
 #include <sys/ioctl.h>
 #include <signal.h>
 #include <fcntl.h>
+
 /*
  *argc:应用程序参数个数
  *argv[]:具体的参数内容，字符串形式 
- *./imx6uirqAPP  <filename>  
- * ./imx6uirqAPP /dev/mx6uirq
+ * ./asyncnotiAPP  <filename>  
+ * ./asyncnotiAPP  /dev/mx6uirq
  */
-int fd;
+
+static int fd;
+
 
 static void sigio_signal_func(int num)
-{
-    int err;
+{  
+    int err = 0;
     unsigned int keyvalue = 0;
-    read(fd,keyvalue,sizeof(keyvalue));
+
+    err = read(fd, &keyvalue, sizeof(keyvalue));   
     if(err < 0) {
 
     } else {
-        printf("sigio signal! key value = %d\r\n",keyvalue);
+        printf("sigio signal! key value = %d\r\n", keyvalue);
     }
 }
+
 
 int main(int argc, char *argv[])
 {
@@ -48,25 +53,16 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    /* 循环读取 */
+
+    /* 设置信号处理函数 */
+    signal(SIGIO, sigio_signal_func);
+
+
+    fcntl(fd, F_SETOWN, getpid()); /* 设置当前进程接收SIGIO信号 */
+    flags = fcntl(fd, F_GETFL); 
+    fcntl(fd, F_SETFL, flags | FASYNC); /* 异步通知 */
+
     while(1) {
-        ret = read(fd, &data, sizeof(data));
-        if(ret < 0) {
-
-        } else {
-            if(data)
-                printf("key value = %#x\r\n", data);
-        }
-
-    }
-
-    signal(SIGIO,sigio_signal_func);
-
-    fcntl(fd, F_SETOWN,getpid());//设置当前进程接受sigio信号
-    flags = fcntl(fd,F_GETFL);
-    fcntl(fd, F_SETFL,flags | FASYNC);//异步通知
-
-    while(1){
         sleep(2);
     }
 

@@ -18,8 +18,8 @@
 #include <asm/uaccess.h>
 #include <asm/io.h>
 #include <linux/interrupt.h>
-#include <linux/fcntl.h>
 #include <linux/poll.h>
+#include <linux/fcntl.h>
 #include <linux/ide.h>
 
 
@@ -96,16 +96,17 @@ data_error:
     return -EINVAL;
 }
 
-static int imx6uirq_fasync(int fd,struct file *filp,int on)
+static int imx6uirq_fasync(int fd, struct file *filp, int on)
 {
-    struct imx6uirq_dev *dev = filp->private_data;
-    return fasync_helper(fd,filp,on,&dev->fasync_queue);
+	struct imx6uirq_dev *dev = filp->private_data;
+
+	return fasync_helper(fd, filp, on, &dev->fasync_queue);
 }
 
-int imx6uirq_release(struct inode *inode,struct file *filp)
-{
-    return imx6uirq_fasync(-1,filp,0);
 
+int imx6uirq_release(struct inode *inode, struct file *filp)
+{
+   return imx6uirq_fasync(-1, filp, 0); 
 }
 
 /* 操作集 */
@@ -113,7 +114,7 @@ static const struct file_operations imx6uirq_fops = {
     .owner		=	THIS_MODULE,
 	.open		=	imx6uirq_open,
     .read       =   imx6uirq_read,
-    .fasync     =   imx6uirq_fasync,
+    .fasync		=   imx6uirq_fasync,
     .release    =   imx6uirq_release,
 };
 
@@ -141,9 +142,8 @@ static void timer_func(unsigned long arg) {
         atomic_set(&dev->releasekey, 1);  /* 完成的按键过程 */
     }
 
-    if(atomic_read(&dev->releasekey)){
-        if(dev->fasync_queue)
-            kill_fasync(&dev->fasync_queue,SIGIO,POLL_IN);
+    if(atomic_read(&dev->releasekey)) {     /* 有效的按键过程 */
+        kill_fasync(&dev->fasync_queue, SIGIO, POLL_IN);
     }
 }
 
