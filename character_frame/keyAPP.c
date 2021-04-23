@@ -5,13 +5,17 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define KEY0VALUE 0xF0
+#define INVAKEY   0x00
+
 int main(int argc, char *argv[])
 {
-    int fd,retvalue;
+    int fd,retvalue,value;
+    int cnt = 0;
     char *filename;
     unsigned char databuf[1];
 
-    if(argc != 3){
+    if(argc != 2){
         printf("Error usage!\r\n");
         return -1;
     };
@@ -24,13 +28,14 @@ int main(int argc, char *argv[])
         return -1;
     };
 
-    databuf[0] = atoi(argv[2]);  //字符转换成数字
-    retvalue = write(fd, databuf,sizeof(databuf));
-    if(retvalue < 0){
-        printf("LED Control Failed!\r\n");
-        close(fd);
-        return -1;
+    /*循环读取按键值*/
+    while(1){
+        read(fd,&value,sizeof(value));
+        if(value == KEY0VALUE){
+            printf("KEY0 Press, value = %d\r\n",value);
+        }
     }
+
     close(fd);
 
     return 0;
